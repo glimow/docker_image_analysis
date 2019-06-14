@@ -41,26 +41,40 @@ if __name__ == "__main__":
     
     images_file = sys.argv[1]
     output_folder = sys.argv[2]
+    pid = int(sys.argv[3])
+    njob = int(sys.argv[4])
     
     with open(images_file, 'r') as images:
+
+        for i in range(pid):
+            images.readline().replace('\n', '')
         
         image = images.readline().replace('\n', '')
         count = 0
 
         while image:
-            image_data = get_image_info(image)
+            try:
 
-            if image.endswith(":latest"):
-                filename = output_folder + '/' + \
-                    image[:2] + '/' + image[:-8] + '.json'
-            else:
-                filename = output_folder + '/' + \
-                    image[:2] + '/' + image + '.json'
+                image_data = get_image_info(image)
+
+                if image.endswith(":latest"):
+                    filename = output_folder + '/' + \
+                        image[:2] + '/' + image[:-8] + '.json'
+                else:
+                    filename = output_folder + '/' + \
+                        image[:2] + '/' + image + '.json'
+                
+                os.makedirs(os.path.dirname(filename), exist_ok=True)
+                
+                with open(filename, "w") as output_file:
+                    json.dump(image_data, output_file, indent=4)
+                print("processed %s", image)
             
-            os.makedirs(os.path.dirname(filename), exist_ok=True)
-            
-            with open(filename, "w") as output_file:
-                json.dump(image_data, output_file, indent=4)
+            except:
+                print("failed %s", image)
+
+            for i in range(njob - 1):
+                images.readline().replace('\n', '')
             
             image = images.readline().replace('\n', '')
             
