@@ -1,3 +1,5 @@
+from ..utils import run
+
 def process_node_packages(package_folders):
     package_list = []
     for folder in package_folders:
@@ -7,7 +9,7 @@ def process_node_packages(package_folders):
             try:
                 name, version, path = line.split(' ').pop().split('@')
                 size = get_ipython().getoutput(
-                    'du --max-depth=0 --exclude=./node_modules {path}').pop().split('\t').pop(0)
+                    f'du --max-depth=0 --exclude=./node_modules {path}').pop().split('\t').pop(0)
                 package_list.append([name, version, int(size)])
             except:
                 pass

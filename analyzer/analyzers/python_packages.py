@@ -1,11 +1,15 @@
+from ..utils import run
 
 def get_python_packages_info(path, python_version="3"):
+
     command = f"sudo chroot {path} pip{python_version} list --format freeze --no-cache-dir . 2>/dev/null"
+
     packages = [package.split('==')
-                for package in get_ipython().getoutput(command)]
+                for package in (command)]
     command = """sudo chroot """ + path + \
         """ pip"""+ python_version + \
         """ list --format freeze --no-cache-dir .|awk -F = {'print $1'}| xargs pip2 show | grep -E 'Location:|Name:' | cut -d ' ' -f 2 | paste -d ' ' - - | awk '{print $2 "/" tolower($1)}' | xargs du -s 2> /dev/null"""
+
     sizes_raw = get_ipython().getoutput(command)
 
     package_list = []

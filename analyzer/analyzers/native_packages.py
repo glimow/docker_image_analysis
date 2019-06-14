@@ -1,3 +1,6 @@
+from ..utils import run
+
+
 def get_package_info(package, distro, path):
     if distro in ['debian', 'ubuntu']:
         name, version = package.split(' ')
@@ -56,6 +59,7 @@ def get_native_packages_list(distro, path):
         return []
 
     natives_packages = get_ipython().getoutput(command)
+
     return natives_packages
 
 def get_native_packages_info(path, distro):

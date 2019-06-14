@@ -1,6 +1,7 @@
 import sys
 import json
 
+from ..utils import run
 
 def get_dir_size(directory):
     size = get_ipython().getoutput(f'sudo du -s {directory}/ | cut -f1').pop()
