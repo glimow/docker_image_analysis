@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
                 if image.endswith(":latest"):
                     filename = output_folder + '/' + \
-                        image[:2] + '/' + image[:-8] + '.json'
+                        image[:2] + '/' + image.split(":").pop() + '.json'
                 else:
                     filename = output_folder + '/' + \
                         image[:2] + '/' + image + '.json'
