@@ -1,7 +1,10 @@
 from ..utils import run
+import logging
 
+logger = logging.getLogger(__name__)
 
 def get_package_info(package, distro, path):
+
     if distro in ['debian', 'ubuntu']:
         name, version = package.split(' ')
         command = f"sudo chroot {path} dpkg -L {name} | xargs stat -c '%s' | paste -s -d+ | bc 2>/dev/null"
@@ -71,7 +74,8 @@ def get_native_packages_info(path, distro):
         try:
             native_packages_info.append(
                 get_package_info(package, distro, path))
-        except:
-            pass
+        except Exception as e:
+            logger.error("Exception", e,
+                         "when prorcessing", package, distro, path)
 
     return native_packages_info

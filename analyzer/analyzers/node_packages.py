@@ -1,4 +1,7 @@
 from ..utils import run
+import logging
+
+logger = logging.getLogger(__name__)
 
 def process_node_packages(package_folders):
     package_list = []
@@ -11,7 +14,8 @@ def process_node_packages(package_folders):
                 size = get_ipython().getoutput(
                     f'du --max-depth=0 --exclude=./node_modules {path}').pop().split('\t').pop(0)
                 package_list.append([name, version, int(size)])
-            except:
+            except Exception as e:
+                logger.error(e)
                 pass
     return package_list
 

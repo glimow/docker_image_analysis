@@ -4,6 +4,7 @@
 import sys
 import json
 import os
+import logging
 
 from analyzer.utils import mount_docker_image, docker_cleanup
 
@@ -12,6 +13,7 @@ from analyzer.analyzers.native_packages import get_native_packages_info
 from analyzer.analyzers.python_packages import get_python_packages_info
 from analyzer.analyzers.node_packages import get_node_packages_info
 
+logger = logging.getLogger(__name__)
 
 def get_image_info(image):
 
@@ -68,10 +70,10 @@ if __name__ == "__main__":
                 
                 with open(filename, "w") as output_file:
                     json.dump(image_data, output_file, indent=4)
-                print("processed %s", image)
+                logger.info("processed", image)
             
-            except:
-                print("failed %s", image)
+            except Exception as e:
+                logger.error("failed processing", image, e)
 
             for i in range(njob - 1):
                 images.readline().replace('\n', '')

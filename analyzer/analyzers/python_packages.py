@@ -1,4 +1,8 @@
 from ..utils import run
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def get_python_packages_info(path, python_version="3"):
 
@@ -23,6 +27,7 @@ def get_python_packages_info(path, python_version="3"):
                 if package in package_version[0]:
                     version = package_version[1]
                     package_list.append([package, version, int(size)])
-        except:
+        except Exception as e:
+            logger.error("Error processing python packages", e)
             pass
     return package_list
