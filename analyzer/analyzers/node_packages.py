@@ -1,5 +1,9 @@
+import os
+
 from ..utils import run
 import logging
+
+NPM_PATCH_PATH = os.getenv("NPM_PATCH_PATH", default="/home/tristan/code/cli")
 
 logger = logging.getLogger(__name__)
 
@@ -7,7 +11,7 @@ def process_node_packages(package_folders):
     package_list = []
     for folder in package_folders:
         result = get_ipython().getoutput(
-            f'(cd {folder}; /home/tristan/code/cli/bin/npm-cli.js ls)')
+            f'(cd {folder}; {NPM_PATCH_PATH + "/bin/npm-cli.js"} ls)')
         for line in result:
             try:
                 name, version, path = line.split(' ').pop().split('@')
