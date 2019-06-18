@@ -8,7 +8,7 @@ def get_package_info(package, distro, path):
 
     if distro in ['debian']:
         name, version = package.split(' ')
-        command = f"sudo chroot {path} dpkg -L {name} | xargs stat -c '%s' | paste -s -d+ | bc 2>/dev/null"
+        command = f"sudo chroot {path} dpkg -L {name} | xargs sudo chroot {path} stat -c '%s' | paste -s -d+ | bc 2>/dev/null"
         size = get_ipython().getoutput(command).pop()
         return [name, version, int(size)]
 
