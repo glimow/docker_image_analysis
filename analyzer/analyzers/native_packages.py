@@ -13,16 +13,7 @@ def get_package_info(package, distro, path):
         return [name, version, int(size)]
 
     if distro in ['ubuntu']:
-        name, version, arch = package.split(' ')[:3]
-        name = name.split('/').pop(0)
-        command = f"sudo chroot {path} apt show {name}"
-        info = get_ipython().getoutput(command)
-        powers = {"GB": 1e9, "MB": 1e6, "kB": 1e3, "B": 1}
-        for line in info:
-            splitted_line = line.split(" ")
-            if "Installed-Size:" in splitted_line:
-                power = splitted_line.pop()
-                size = float(splitted_line.pop())*powers[power]
+        name, version, size = package.split('\t')[:3]
         return [name, version, int(size)]
 
     if distro in ['arch']:
@@ -65,7 +56,7 @@ def get_native_packages_list(distro, path):
         command = f"sudo chroot {path} dpkg -l 2>/dev/null | sed -e '1,/+++/d' | tr -s ' ' | cut -d ' ' -f 2,3 2>/dev/null"
 
     elif distro in ['ubuntu']:
-        command = f"sudo chroot {path} apt list 2>/dev/null"
+        command = f"sudo chroot {path}" + " dpkg-query -Wf '${Package}\t${Version}\t${Installed-Size}\n' 2>/dev/null"
 
     elif distro in ['arch']:
         command = f"sudo chroot {path} pacman -Q 2>/dev/null"

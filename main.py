@@ -48,7 +48,9 @@ if __name__ == "__main__":
     
     with open(images_file, 'r') as images:
 
-        for i in range(pid):
+        image_count = int(get_ipython().getoutput(f"find {output_folder} -type f | wc -l").pop())
+
+        for i in range(pid + image_count):
             images.readline().replace('\n', '')
         
         image = images.readline().replace('\n', '')
