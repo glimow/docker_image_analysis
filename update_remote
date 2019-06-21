@@ -1,0 +1,6 @@
+#!/bin/bash
+for host in $(seq 1 4)
+do
+    ssh typos-$host.infra.mining.prod.srcd.host "bash ./docker_image_analysis/update"
+done
+echo "done"
