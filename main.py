@@ -59,21 +59,25 @@ if __name__ == "__main__":
         while image:
             try:
 
-                image_data = get_image_info(image)
-
                 if image.endswith(":latest"):
                     filename = output_folder + '/' + \
                         image[:2] + '/' + image.split(":").pop(0) + '.json'
                 else:
                     filename = output_folder + '/' + \
                         image[:2] + '/' + image + '.json'
-                
-                os.makedirs(os.path.dirname(filename), exist_ok=True)
-                
-                with open(filename, "w") as output_file:
-                    json.dump(image_data, output_file, indent=4)
-                logger.info("processed", image)
-            
+
+                if not os.path.isfile(filename):
+                    image_data = get_image_info(image)
+
+                    
+                    os.makedirs(os.path.dirname(filename), exist_ok=True)
+                    
+                    with open(filename, "w") as output_file:
+                        json.dump(image_data, output_file, indent=4)
+                    logger.info("processed", image)
+                else:
+                    logger.info("found existing", image)
+
             except Exception as e:
                 logger.error("failed processing", image, e)
 
@@ -86,5 +90,5 @@ if __name__ == "__main__":
 
             # Remove all unused images and volumes
             # So the script do not end up filling all available disk space
-            if count % 100:
+            if count % 300:
                 docker_cleanup()
