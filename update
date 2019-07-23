@@ -1,6 +1,0 @@
-#!/bin/bash
-cd /home/tristan/docker_image_analysis
-sudo killall ipython
-git pull
-sudo NPM_PATCH_PATH='/home/tristan/cli' nohup bash launch_distributed_parallel.sh 24 $
-sleep 10
