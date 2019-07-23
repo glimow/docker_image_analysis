@@ -33,4 +33,4 @@ The output directory structure is the same as the [DockerhubMetadata dataset](ht
 
 # Notes
 
-- `show_count` is a bash script that specifically fetches the amount of already fetched images in source{d}'s `typos{1-4}` nodes. It is of no use outside of the organization and should be removed before making the repo public. It is left here as documentation about the ongoing tasks.
+- `show_count` is a bash script that specifically shows the amount of already fetched images in source{d}'s `typos{1-4}` nodes. It is of no use outside of the organization and should be removed before making the repo public. It is left here as documentation about the ongoing tasks.
