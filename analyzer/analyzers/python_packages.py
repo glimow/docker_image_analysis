@@ -5,6 +5,18 @@ logger = logging.getLogger(__name__)
 
 
 def process_one_package(path, package, python_version="3"):
+    """Get details about one precise python package in the given image.
+    
+    :param path: path were the docker image filesystem is expanded.
+    :type path: string
+    :param package: name of the python package to get info from.
+    :type package: string
+    :param python_version: version of python to use. can be "2" or "3". default to "3".
+    :type python_version: string
+    
+    :return: list containing package name, version and size  
+    :rtype: list[string, string, int]
+    """
     command = f"sudo chroot {path} pip{python_version} show {package}"
     info = get_ipython().getoutput(command)
     for line in info:
@@ -38,7 +50,16 @@ def process_one_package(path, package, python_version="3"):
     return [name, version, size]
 
 def get_python_packages_info(path, python_version="3"):
-
+    """Get details about all python packages in an image filesystem.
+    
+    :param path: path were the docker image filesystem is expanded.
+    :type path: string
+    :param python_version: version of python to use. can be "2" or "3". default to "3".
+    :type python_version: string
+    
+    :return: list containing lists of each package's name, version and size  
+    :rtype: list[list[string, string, int]]
+    """
     command = f"sudo chroot {path} pip{python_version} list --format freeze --no-cache-dir 2>/dev/null"
 
     packages = [package.split('==')

@@ -16,7 +16,15 @@ from analyzer.analyzers.node_packages import get_node_packages_info
 logger = logging.getLogger(__name__)
 
 def get_image_info(image):
+    """Retrieve information from a given dockerhub image.
 
+    :param image: name of the docker image to get info from.
+    :type image: string
+
+    :return: Dictionnary containing image name, size, distro, version and
+            package information. 
+    :rtype: dict
+    """
     with mount_docker_image(image) as image_path:
 
         distro, version, image_size = get_base_info(image_path)

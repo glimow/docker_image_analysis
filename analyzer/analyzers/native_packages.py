@@ -4,8 +4,18 @@ import logging
 logger = logging.getLogger(__name__)
 
 def get_package_info(package, distro, path):
-    
+    """Get details about one precise native package in the given image for the given distro.
 
+    :param distro: expected distribution.
+    :type distro: string
+    :param package: name of the python package to get info from.
+    :type package: string
+    :param path: path were the docker image filesystem is expanded.
+    :type path: string
+
+    :return: list containing package name, version and size
+    :rtype: list[string, string, int]
+    """
     if distro in ['debian']:
         name, version = package.split(' ')
         command = f"sudo chroot {path} dpkg -L {name} | xargs sudo chroot {path} stat -c '%s' | paste -s -d+ | bc 2>/dev/null"
@@ -51,7 +61,16 @@ def get_package_info(package, distro, path):
 
 
 def get_native_packages_list(distro, path):
+    """List all native packages in an image filesystem given it's distro.
 
+    :param distro: expected distribution name.
+    :type distro: string
+    :param path: path were the docker image filesystem is expanded.
+    :type path: string
+
+    :return: list of each package's name
+    :rtype: list[string]
+    """
     if distro in ['debian']:
         command = f"sudo chroot {path} dpkg -l 2>/dev/null | sed -e '1,/+++/d' | tr -s ' ' | cut -d ' ' -f 2,3 2>/dev/null"
 
@@ -74,7 +93,16 @@ def get_native_packages_list(distro, path):
     return natives_packages
 
 def get_native_packages_info(path, distro):
+    """Get details about all native packages in an image filesystem given expected distro.
     
+    :param path: path were the docker image filesystem is expanded.
+    :type path: string
+    :param distro: expected distribution name.
+    :type distro: string
+
+    :return: list containing lists of each package's name, version and size
+    :rtype: list[list[string, string, int]]
+    """
     native_packages = get_native_packages_list(distro, path)
     native_packages_info = []
 
